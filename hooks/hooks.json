@@ -1,0 +1,13 @@
+{
+  "hooks": [
+    {
+      "event": "user-prompt-submit",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "cat hooks/context.json"
+        }
+      ]
+    }
+  ]
+}

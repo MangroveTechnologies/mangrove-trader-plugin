@@ -1,19 +1,35 @@
-# MangroveTrader Plugins
+# MangroveTrader Plugin
 
-Claude Code + OpenClaw plugins for MangroveTrader social trading leaderboard (@MangroveTrader).
+Claude Code plugin for the MangroveTrader social trading leaderboard.
 
 ## Structure
 
-- `.claude/skills/` -- Claude Code skills (one per interaction)
-- `.claude/commands/` -- Slash commands
-- `.claude/hooks/` -- Lifecycle hooks
-- `openclaw-plugin/` -- OpenClaw plugin with tool proxies
-- `shared/` -- Config and types
+```
+.claude-plugin/plugin.json    Plugin manifest (required for marketplace)
+.mcp.json                     MCP server config (remote, streamable HTTP)
+skills/mangrove-trader/       Consolidated skill for all 7 tool interactions
+commands/                     Slash commands (status, track, stats)
+hooks/                        Context injection on prompt submit
+```
 
-## Rules
+## MCP Server
 
-- Trades logged via Twitter only. track-trade skill helps compose tweets.
-- x402 paid skills: call without payment, present price, call with payment.
-- Error responses: {error, code, message, suggestion}
-- Server: MANGROVE_TRADER_URL env var, default localhost:8080
-- Twitter: @MangroveTrader
+The plugin connects to the MangroveTrader MCP server via streamable HTTP. The server URL is configured in `.mcp.json`. No local process is needed -- the server runs on GCP Cloud Run.
+
+## Tools (6 total)
+
+**Free (no auth):** `trader_my_stats`, `trader_performance_report`, `trader_last_trade`
+**Paid (x402):** `trader_get_leaderboard` ($0.25+), `trader_search_trader` ($0.02), `trader_get_trade_history` ($0.01/3 trades)
+
+## x402 Payment Convention
+
+Paid tools follow a two-step flow:
+1. Call WITHOUT `payment` parameter -- server returns PAYMENT_REQUIRED with price
+2. Present price to user, ask to confirm
+3. Call WITH `payment` parameter (value from step 1 response)
+
+Never skip the confirmation step. Never hardcode prices -- always read from the PAYMENT_REQUIRED response.
+
+## Trade Tracking
+
+Trades are logged by tweeting to @MangroveTrader on Twitter. This plugin does NOT submit trades directly -- it helps users compose the tweet format.

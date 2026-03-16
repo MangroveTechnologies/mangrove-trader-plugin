@@ -2,7 +2,7 @@
   "mcpServers": {
     "mangrove-trader": {
       "type": "streamableHttp",
-      "url": "http://localhost:8080/mcp"
+      "url": "https://mangrovetrader-vogazmmyca-uc.a.run.app/mcp"
     }
   }
 }

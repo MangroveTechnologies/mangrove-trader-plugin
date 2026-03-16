@@ -1,0 +1,6 @@
+{
+  "hookSpecificOutput": {
+    "suppressOutput": true,
+    "additionalContext": "MangroveTrader plugin active. Free tools: trader_my_stats, trader_performance_report, trader_last_trade. Paid tools (x402 USDC on Base): trader_get_leaderboard ($0.25+), trader_search_trader ($0.02), trader_get_trade_history ($0.01/3 trades). Trades are logged by tweeting to @MangroveTrader on Twitter."
+  }
+}
