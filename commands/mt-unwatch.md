@@ -1,11 +1,11 @@
 ---
 name: mt-unwatch
-description: Stop watching a trader
+description: Remove a trader from your watchlist
 ---
 
 # mt-unwatch
 
-Remove a trader from your watchlist.
+Remove a trader from your watchlist. See `/mt-watch` for details on what the watchlist does.
 
 ## Steps
 

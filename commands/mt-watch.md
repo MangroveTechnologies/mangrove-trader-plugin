@@ -1,11 +1,11 @@
 ---
 name: mt-watch
-description: Watch a trader to follow their activity
+description: Add a trader to your watchlist (activity notifications coming soon)
 ---
 
 # mt-watch
 
-Add a trader to your watchlist.
+Add a trader to your watchlist. This saves the relationship for future use -- activity notifications for watched traders are planned but not yet available.
 
 ## Steps
 

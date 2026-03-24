@@ -32,8 +32,8 @@ All commands are prefixed with `/mt-`:
 | `/mt-history` | Complete trade history | Paid ($0.01/3 trades) |
 | `/mt-track` | Compose a trade tweet for @MangroveTrader | Free |
 | `/mt-cancel` | Cancel your last trade (5-min window) | Free |
-| `/mt-watch` | Watch a trader's activity | Free |
-| `/mt-unwatch` | Stop watching a trader | Free |
+| `/mt-watch` | Add a trader to your watchlist (notifications coming soon) | Free |
+| `/mt-unwatch` | Remove a trader from your watchlist | Free |
 | `/mt-status` | Server health and tool availability | Free |
 | `/mt-help` | List all commands | Free |
 

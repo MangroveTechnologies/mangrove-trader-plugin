@@ -26,9 +26,12 @@ PAID DATA (x402, USDC on Base)
 
 TRADE ACTIONS
   /mt-track        Compose a trade tweet for @MangroveTrader
-  /mt-cancel       Cancel your last trade (5-min window) 
-SOCIAL
-  /mt-watch        Watch a trader's activity   /mt-unwatch      Stop watching a trader 
+  /mt-cancel       Cancel your last trade (5-min window)
+
+WATCHLIST (notifications coming soon)
+  /mt-watch        Add a trader to your watchlist
+  /mt-unwatch      Remove a trader from your watchlist
+
 UTILITY
   /mt-status       Server health and tool availability
   /mt-help         This help message

@@ -30,8 +30,8 @@ Social trading leaderboard. Traders tweet to **@MangroveTrader** on Twitter, a G
 | `/mt-history` | Trade history | x402 $0.01/3 trades |
 | `/mt-track` | Compose a trade tweet | Free |
 | `/mt-cancel` | Cancel last trade (5-min window) | Free |
-| `/mt-watch` | Watch a trader | Free |
-| `/mt-unwatch` | Stop watching a trader | Free |
+| `/mt-watch` | Add to watchlist (notifications coming soon) | Free |
+| `/mt-unwatch` | Remove from watchlist | Free |
 | `/mt-status` | Server health + tool list | Free |
 | `/mt-help` | List all commands | Free |
 
@@ -181,8 +181,8 @@ Traders must close a minimum number of trades to qualify for scoring and the lea
 | `trader_search_trader` | x402 | $0.02 | Look up any trader by name/handle |
 | `trader_get_trade_history` | x402 | $0.01/3 trades | Full trade log |
 | `trader_cancel_last` | Free | -- | Cancel most recent trade |
-| `trader_watch` | Free | -- | Watch a trader |
-| `trader_unwatch` | Free | -- | Stop watching |
+| `trader_watch` | Free | -- | Add to watchlist (notifications coming soon) |
+| `trader_unwatch` | Free | -- | Remove from watchlist |
 
 ---
 
