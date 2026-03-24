@@ -4,25 +4,44 @@ description: >-
   Use when the user asks about trading, leaderboard, portfolio, performance,
   track a trade, log a buy or sell, check stats, rank, score, search for a
   trader, look up a trader, last trade, trade history, x402 payment, top
-  traders, how am I doing, my rank, my score, my positions, open positions.
-version: 1.0.0
+  traders, how am I doing, my rank, my score, my positions, open positions,
+  cancel trade, watch trader, unwatch, follow trader.
+version: 2.0.0
 ---
 
 # MangroveTrader
 
 Social trading leaderboard. Traders tweet to **@MangroveTrader** on Twitter, a Grok-powered agent parses trades, tracks positions against real market data, computes scoring metrics, and exposes rankings.
 
-**6 MCP tools** — 3 free, 3 paid via x402 micropayments (USDC on Base).
+**9 MCP tools** -- 3 free, 3 paid via x402 (USDC on Base), 3 coming soon.
+**12 commands** -- all prefixed with `/mt-`.
+
+---
+
+## Commands
+
+| Command | Description | Access |
+|---------|-------------|--------|
+| `/mt-stats` | Score, rank, open positions | Free |
+| `/mt-report` | Detailed performance breakdown | Free |
+| `/mt-last` | Most recent trade | Free |
+| `/mt-leaderboard` | Full rankings | x402 $0.25+ |
+| `/mt-search` | Find a trader | x402 $0.02 |
+| `/mt-history` | Trade history | x402 $0.01/3 trades |
+| `/mt-track` | Compose a trade tweet | Free |
+| `/mt-cancel` | Cancel last trade (5-min window) | Free (coming soon) |
+| `/mt-watch` | Watch a trader | Free (coming soon) |
+| `/mt-unwatch` | Stop watching a trader | Free (coming soon) |
+| `/mt-status` | Server health + tool list | Free |
+| `/mt-help` | List all commands | Free |
 
 ---
 
 ## Track a Trade
 
-MangroveTrader tracks trades posted to Twitter. Help the user compose their trade tweet.
+Trades are submitted by tweeting to @MangroveTrader on Twitter. Use `/mt-track` to compose the tweet.
 
 ### Tweet Format
-
-Tweet to **@MangroveTrader** with one of these formats:
 
 | Asset Class | Example |
 |-------------|---------|
@@ -34,57 +53,112 @@ Tweet to **@MangroveTrader** with one of these formats:
 **Actions:** `enter long`, `enter short`, `exit long`, `exit short`
 **Shortcuts:** `long 100 AAPL` (defaults to `enter long`), `bought`, `sold`, `grabbed`, `dumped`, `faded`
 
-### Steps
-
-1. Ask for trade details if not provided: action, quantity, symbol, price
-2. For options: also need strike, C/P (call/put), expiry (YYYY-MM-DD format)
-3. Compose the tweet text
-4. Tell the user: "Tweet this to @MangroveTrader:" followed by the formatted trade text
-
-### Other Twitter Commands
-
-- `my stats` — replies with score, rank, trade count
-- `leaderboard` — replies with x402 payment requirements
-- `cancel last` — cancels the most recent trade
-
 ---
 
-## My Stats / Portfolio (Free)
+## Free Tools
+
+### My Stats -- `/mt-stats`
 
 **Tool:** `trader_my_stats`
 
-### Steps
+1. Call with `twitter_handle`
+2. Returns: composite_score, rank, total_trades, qualified, open_positions
 
-1. Ask for the user's Twitter handle if not known
-2. Call `trader_my_stats` with `twitter_handle`
-3. Present results:
-   - **Composite Score** (0-100)
-   - **Rank** (among all traders)
-   - **Total Trades**
-   - **Qualified** (true/false — requires minimum trade count)
-   - **Open Positions** count
-4. Suggest the performance skill for a detailed breakdown
-
----
-
-## Performance Report (Free)
+### Performance Report -- `/mt-report`
 
 **Tool:** `trader_performance_report`
 
-### Steps
+1. Call with `twitter_handle` and `timeframe` (daily/weekly/monthly/all_time/30d/7d, default: 30d)
+2. Returns: composite_score, rank, total_return_pct, sharpe_ratio, max_drawdown_pct, win_rate, trade_count
 
-1. Ask for Twitter handle and timeframe if not provided
-2. Call `trader_performance_report` with `twitter_handle` and `timeframe`
-   - Valid timeframes: `daily`, `weekly`, `monthly`, `all_time`, `30d`, `7d`
-   - Default: `30d`
-3. Present results with scoring breakdown:
-   - **Composite Score** and **Rank**
-   - **Return %** (50% of score weight)
-   - **Sharpe Ratio** — consistency measure (30% of score weight)
-   - **Max Drawdown %** — risk management (20% of score weight)
-   - **Win Rate** and **Trade Count**
+### Last Trade -- `/mt-last`
 
-### Scoring Formula
+**Tool:** `trader_last_trade`
+
+1. Call with `twitter_handle`
+2. Returns: action, symbol, asset_class, quantity, price, created_at, total_trades
+
+---
+
+## Paid Tools (x402)
+
+All paid tools follow the x402 payment protocol. See [Payment Flow](#x402-payment-flow) below.
+
+### Leaderboard -- `/mt-leaderboard`
+
+**Tool:** `trader_get_leaderboard` -- $0.25+ USDC on Base
+
+1. Call WITHOUT `payment` param (include `timeframe` and `limit`)
+2. Get PAYMENT_REQUIRED with price
+3. Present price, confirm with user
+4. If confirmed and payment signed, call WITH `payment`
+5. Returns: ranked list of traders with score, return %, trade count
+
+### Search Trader -- `/mt-search`
+
+**Tool:** `trader_search_trader` -- $0.02 USDC on Base
+
+1. Call WITHOUT `payment` (include `query`)
+2. Get PAYMENT_REQUIRED
+3. Confirm with user
+4. Call WITH `payment`
+5. Returns: handle, display_name, score, rank, trade_count, qualified
+
+### Trade History -- `/mt-history`
+
+**Tool:** `trader_get_trade_history` -- $0.01 per 3 trades USDC on Base
+
+1. Call WITHOUT `payment` (include `twitter_handle`, optional `limit`)
+2. Get PAYMENT_REQUIRED with total_trades and computed price
+3. Present: "X trades available, cost is $Y USDC. Proceed?"
+4. Call WITH `payment`
+5. Returns: list of trades with action, symbol, asset_class, quantity, price, timestamp
+
+---
+
+## x402 Payment Flow
+
+Paid tools use the [x402 protocol](https://www.x402.org/) for micropayments on Base (Coinbase L2) in USDC.
+
+### Two-Step Flow
+
+1. **Call WITHOUT `payment`** -- server returns PAYMENT_REQUIRED with:
+   - `price`: cost in USDC
+   - `payment_required`: base64-encoded x402 payment requirements
+   - `payment_required_decoded`: human-readable requirements (network, address, amount)
+2. **Present the price** to the user and ask for confirmation
+3. **Sign and submit payment** -- requires an EVM wallet with USDC on Base
+4. **Call WITH `payment`** -- pass the signed x402 payment header
+5. **Present the data** from the successful response
+
+### Payment Capability
+
+**For agents with a wallet (autonomous agents):**
+- Need an EVM wallet with USDC balance on Base network
+- Use the x402 SDK to sign the payment against the requirements from step 1
+- The MangroveMarkets TypeScript SDK (`@mangrove/sdk`) includes an x402 payment client
+
+**For agents without a wallet (Claude Code users):**
+- Free tools (mt-stats, mt-report, mt-last) work without payment
+- For paid tools, present the price and suggest:
+  - Use an API key (X-API-Key header bypasses x402 on REST endpoints)
+  - Use the REST API directly at `https://api.mangrovetraders.com/api/x402/`
+  - Check @MangroveTrader on Twitter for daily leaderboard updates
+
+**API key access (bypasses x402):**
+- Add `X-API-Key: <key>` header to REST requests
+- API keys are issued to qualifying traders or by Mangrove Technologies
+- API key holders get free access to all paid endpoints
+
+### Payment Safety
+
+- Payment is NOT charged if data retrieval fails
+- Verify-then-settle: payment is verified before data fetch, settled only after successful response
+- All transactions on Base (low gas, fast finality)
+
+---
+
+## Scoring Formula
 
 | Component | Weight | Metric |
 |-----------|--------|--------|
@@ -92,134 +166,7 @@ Tweet to **@MangroveTrader** with one of these formats:
 | Consistency | 30% | Sharpe ratio |
 | Risk Management | 20% | Max drawdown (lower is better) |
 
----
-
-## Last Trade (Free)
-
-**Tool:** `trader_last_trade`
-
-### Steps
-
-1. Ask for Twitter handle if not known
-2. Call `trader_last_trade` with `twitter_handle`
-3. Present the most recent trade:
-   - **Action** (buy/sell/long/short)
-   - **Symbol**
-   - **Quantity** and **Price**
-   - **Timestamp**
-   - **Total trade count**
-4. Mention that full trade history is available via the paid `trader_get_trade_history` tool
-
----
-
-## Leaderboard ($0.25+ USDC on Base)
-
-**Tool:** `trader_get_leaderboard`
-
-This is an x402 paid tool. Follow the [x402 Payment Flow](#x402-payment-flow) below.
-
-### Steps
-
-1. Call `trader_get_leaderboard` **WITHOUT** the `payment` parameter
-   - Include `timeframe` and `limit` if the user specified them
-   - Default: `timeframe="all_time"`, `limit=100`
-2. Server returns `PAYMENT_REQUIRED` with the price
-3. Tell the user the cost and ask to confirm
-4. If confirmed, call again **WITH** the `payment` parameter from the response
-5. Present the leaderboard: rank, handle, score, return %
-
-### Parameters
-
-- `timeframe`: `daily`, `weekly`, `monthly`, `all_time`, `30d`, `7d` (default: `all_time`)
-- `limit`: 1-500 (default: 100)
-- `payment`: x402 payment signature (from PAYMENT_REQUIRED response)
-
-### Pricing
-
-- **$0.25** for up to 100 rows
-- **+$0.01 per 4 additional rows** beyond 100
-- Max 500 rows
-- Examples: 100 rows = $0.25, 200 rows = $0.50, 500 rows = $1.25
-
-### If Declined
-
-- Their own rank is always free via `trader_my_stats`
-- Daily top 10 posted on @MangroveTrader Twitter
-
----
-
-## Search Trader ($0.02 USDC on Base)
-
-**Tool:** `trader_search_trader`
-
-This is an x402 paid tool. Follow the [x402 Payment Flow](#x402-payment-flow) below.
-
-### Steps
-
-1. Get the Twitter handle or name to search for
-2. Call `trader_search_trader` **WITHOUT** the `payment` parameter, with the `query`
-3. Server returns `PAYMENT_REQUIRED` ($0.02 USDC)
-4. Ask the user to confirm
-5. If confirmed, call again **WITH** the `payment` parameter
-6. Present results: handle, display name, score, rank, trade count, qualified status
-
-### Parameters
-
-- `query`: Search string — handle or display name (max 100 chars)
-- `limit`: 1-50 (default: 20)
-- `payment`: x402 payment signature
-
----
-
-## Trade History ($0.01 per 3 trades, USDC on Base)
-
-**Tool:** `trader_get_trade_history`
-
-This is an x402 paid tool. Follow the [x402 Payment Flow](#x402-payment-flow) below.
-
-### Steps
-
-1. Ask for Twitter handle and optionally how many trades they want
-2. Call `trader_get_trade_history` **WITHOUT** the `payment` parameter
-   - The response includes `total_trades`, `requested_trades`, and the computed `price`
-3. Tell the user: "X trades available, cost is $Y USDC. Proceed?"
-4. If confirmed, call again **WITH** the `payment` parameter
-5. Present trade history: action, symbol, asset class, quantity, price, timestamp
-
-### Parameters
-
-- `twitter_handle`: Twitter handle (with or without @)
-- `limit`: Number of trades (0 = all, max 1000)
-- `payment`: x402 payment signature
-
-### Pricing
-
-- **$0.01 per 3 trades** (rounded up)
-- Examples: 3 trades = $0.01, 10 trades = $0.04, 100 trades = $0.34
-
----
-
-## x402 Payment Flow
-
-All paid tools follow this two-step protocol:
-
-1. **Call WITHOUT `payment`** — Server returns `PAYMENT_REQUIRED` with:
-   - `price`: The cost in USDC
-   - `payment_required`: Base64-encoded x402 payment header
-   - `payment_required_decoded`: Human-readable payment requirements
-2. **Present the price** to the user and ask for confirmation
-3. **Call WITH `payment`** — Pass the `payment_required` value as the `payment` parameter
-4. **Present the data** from the successful response
-
-If payment is declined, suggest free alternatives:
-- Own stats are always free via `trader_my_stats`
-- Daily top 10 posted on @MangroveTrader Twitter
-
-**Payment details:**
-- Network: **Base** (Coinbase L2)
-- Currency: **USDC**
-- Protocol: **x402** (HTTP payment protocol)
-- Payment is NOT charged if data retrieval fails
+Traders must close a minimum number of trades to qualify for scoring and the leaderboard. Scoring runs at midnight UTC daily.
 
 ---
 
@@ -233,3 +180,15 @@ If payment is declined, suggest free alternatives:
 | `trader_get_leaderboard` | x402 | $0.25+ | Full rankings (dynamic pricing) |
 | `trader_search_trader` | x402 | $0.02 | Look up any trader by name/handle |
 | `trader_get_trade_history` | x402 | $0.01/3 trades | Full trade log |
+| `trader_cancel_last` | Free | -- | Cancel most recent trade (coming soon) |
+| `trader_watch` | Free | -- | Watch a trader (coming soon) |
+| `trader_unwatch` | Free | -- | Stop watching (coming soon) |
+
+---
+
+## Endpoints
+
+- **MCP**: `https://api.mangrovetraders.com/mcp/` (Streamable HTTP)
+- **REST API docs**: `https://api.mangrovetraders.com/api/docs`
+- **Health**: `https://api.mangrovetraders.com/health`
+- **Twitter**: [@MangroveTrader](https://twitter.com/MangroveTrader)

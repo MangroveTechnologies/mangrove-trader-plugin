@@ -1,0 +1,37 @@
+---
+name: mt-leaderboard
+description: View the MangroveTrader leaderboard rankings (x402 paid, $0.25+ USDC on Base)
+---
+
+# mt-leaderboard
+
+View the full MangroveTrader leaderboard.
+
+This is an x402 paid tool. The agent or user must pay in USDC on Base to access the data.
+
+## Steps
+
+1. Ask for optional parameters:
+   - **Timeframe**: daily, weekly, monthly, all_time, 30d, 7d (default: all_time)
+   - **Limit**: 1-500 rows (default: 100)
+2. Call `trader_get_leaderboard` MCP tool WITHOUT the `payment` parameter
+3. The server returns PAYMENT_REQUIRED with:
+   - `price`: cost in USDC (e.g., "$0.25")
+   - `payment_required`: base64-encoded x402 payment requirements
+4. Present the price to the user and ask to confirm
+5. **If the user/agent has x402 payment capability** (EVM wallet with USDC on Base):
+   - Sign the payment using the x402 protocol against the requirements
+   - Call `trader_get_leaderboard` again WITH the signed `payment` parameter
+   - Present the leaderboard: rank, handle, score, return %
+6. **If no payment capability**:
+   - Tell the user the price and suggest alternatives:
+     - Own rank is always free via `/mt-stats`
+     - Use the REST API at `https://api.mangrovetraders.com/api/x402/leaderboard` with an API key (X-API-Key header bypasses payment)
+     - Daily top 10 posted on @MangroveTrader Twitter
+
+## Pricing
+
+- $0.25 for up to 100 rows
+- +$0.01 per 4 additional rows beyond 100
+- Max 500 rows
+- Examples: 100 rows = $0.25, 200 rows = $0.50, 500 rows = $1.25
