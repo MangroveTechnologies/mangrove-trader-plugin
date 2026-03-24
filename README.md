@@ -4,15 +4,18 @@ Social trading leaderboard plugin. Track trades via [@MangroveTrader](https://tw
 
 ## Install
 
+From source (GitHub):
+
 ```bash
+git clone https://github.com/MangroveTechnologies/mangrove-trader-plugins.git
+claude plugin marketplace add ./mangrove-trader-plugins
 claude plugin install mangrove-trader
 ```
 
-Or install from source:
+Or load for a single session without installing:
 
 ```bash
-git clone https://github.com/MangroveTechnologies/mangrove-trader-plugin.git
-claude plugin install ./mangrove-trader-plugin
+claude --plugin-dir ./mangrove-trader-plugins
 ```
 
 ## Tools
