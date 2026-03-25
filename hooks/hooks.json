@@ -1,13 +1,15 @@
 {
-  "UserPromptSubmit": [
-    {
-      "matcher": "",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "cat hooks/context.json"
-        }
-      ]
-    }
-  ]
+  "description": "MangroveTrader context hook — injects available commands and tools on each prompt",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat hooks/context.json"
+          }
+        ]
+      }
+    ]
+  }
 }
