@@ -1,7 +1,7 @@
 {
-  "hooks": [
+  "UserPromptSubmit": [
     {
-      "event": "user-prompt-submit",
+      "matcher": "",
       "hooks": [
         {
           "type": "command",
