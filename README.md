@@ -38,6 +38,7 @@ All commands are prefixed with `/mt-`:
 | `/mt-cancel` | Cancel last trade (5-min window) | Free |
 | `/mt-watch` | Watch a trader | Free |
 | `/mt-unwatch` | Unwatch a trader | Free |
+| `/mt-set-handle` | Set your Twitter handle for this session | Free |
 | `/mt-status` | Server health | Free |
 | `/mt-help` | List all commands | Free |
 

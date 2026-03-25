@@ -14,7 +14,7 @@ version: 2.0.0
 Social trading leaderboard. Traders tweet to **@MangroveTrader** on Twitter, a Grok-powered agent parses trades, tracks positions against real market data, computes scoring metrics, and exposes rankings.
 
 **9 MCP tools** -- 6 free, 3 paid via x402 (USDC on Base).
-**12 commands** -- all prefixed with `/mt-`.
+**13 commands** -- all prefixed with `/mt-`.
 
 ---
 
@@ -32,6 +32,7 @@ Social trading leaderboard. Traders tweet to **@MangroveTrader** on Twitter, a G
 | `/mt-cancel` | Cancel last trade (5-min window) | Free |
 | `/mt-watch` | Watch a trader | Free |
 | `/mt-unwatch` | Unwatch a trader | Free |
+| `/mt-set-handle` | Set your Twitter handle for this session | Free |
 | `/mt-status` | Server health + tool list | Free |
 | `/mt-help` | List all commands | Free |
 

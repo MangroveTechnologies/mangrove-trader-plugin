@@ -9,12 +9,13 @@ View a trader's complete trade history. Your own history is free.
 
 ## Steps
 
-1. Ask for the Twitter handle to look up, and optional trade limit (0 = all, max 1000)
+1. Use the handle from `/mt-set-handle` if set. Otherwise ask for the Twitter handle to look up, and optional trade limit (0 = all, max 1000).
 2. **If looking up your own history**: call `trader_get_trade_history` with `twitter_handle` AND `requester_handle` set to your own handle. No payment needed -- data returns directly with `"access": "free"`.
-3. **If looking up someone else's history**: call `trader_get_trade_history` WITHOUT `payment` parameter first. Server returns PAYMENT_REQUIRED with total trades and computed price.
-4. Present: "X trades available, cost is $Y USDC. Proceed?"
-5. **If payment capability available**: sign x402 payment, call again WITH `payment`, present trade list (action, symbol, asset class, quantity, price, timestamp)
-6. **If no payment capability**: suggest `/mt-last` (free, shows most recent trade only) or the REST API with an API key
+3. **If MCP tool is not available for own history**, fall back to REST: `POST https://api.mangrovetraders.com/api/v1/trader/trade_history` with `{"twitter_handle": "<handle>", "requester_handle": "<handle>"}`
+4. **If looking up someone else's history**: call `trader_get_trade_history` WITHOUT `payment` parameter first. Server returns PAYMENT_REQUIRED with total trades and computed price.
+5. Present: "X trades available, cost is $Y USDC. Proceed?"
+6. **If payment capability available**: sign x402 payment, call again WITH `payment`, present trade list (action, symbol, asset class, quantity, price, timestamp)
+7. **If no payment capability**: suggest `/mt-last` (free, shows most recent trade only) or the REST API with an API key
 
 ## Pricing
 
