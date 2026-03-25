@@ -9,8 +9,9 @@ Cancel the most recent trade. Only works within 5 minutes of submission.
 
 ## Steps
 
-1. Ask for the trader's Twitter handle if not provided
+1. Use the handle from `/mt-set-handle` if set. Otherwise ask for the trader's Twitter handle.
 2. Call the `trader_cancel_last` MCP tool with `twitter_handle`
+   - **If MCP tool is not available**: this command requires the MCP connection. Suggest running `/mt-status` to check server health.
 3. If successful: show the cancelled trade details (symbol, action, quantity, price)
 4. If `CANCEL_WINDOW_EXPIRED`: tell the user the window has passed, show how long ago the trade was
 5. If `NO_TRADES`: tell the user no trades were found

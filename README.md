@@ -2,7 +2,7 @@
 
 [MangroveTrader](https://mangrovetraders.com) is a social trading leaderboard where traders post trades on Twitter, positions are tracked against real market data, and performance is scored daily.
 
-This plugin connects Claude Code to the MangroveTrader MCP server, giving you 12 slash commands and 9 MCP tools for stats, leaderboard, trade history, and more.
+This plugin connects Claude Code to the MangroveTrader MCP server, giving you 13 slash commands and 9 MCP tools for stats, leaderboard, trade history, and more.
 
 **Website:** [mangrovetraders.com](https://mangrovetraders.com)
 **Twitter:** [@MangroveTrader](https://twitter.com/MangroveTrader)
@@ -28,17 +28,18 @@ All commands are prefixed with `/mt-`:
 
 | Command | Description | Access |
 |---------|-------------|--------|
-| `/mt-stats` | Your score, rank, and open positions | Free |
-| `/mt-report` | Detailed performance breakdown (return, Sharpe, drawdown) | Free |
+| `/mt-track` | Compose a trade tweet | Free |
+| `/mt-stats` | Your score, rank, open positions | Free |
+| `/mt-report` | Performance breakdown (return, Sharpe, drawdown) | Free |
 | `/mt-last` | Most recent trade and total count | Free |
-| `/mt-leaderboard` | Full leaderboard rankings | Paid ($0.25+ USDC) |
+| `/mt-history` | Trade history | Free (own) / Paid $0.01/3 trades (others) |
+| `/mt-leaderboard` | Full rankings (top 5 free on Twitter) | Paid ($0.25+ USDC) |
 | `/mt-search` | Find a trader by handle or name | Paid ($0.02 USDC) |
-| `/mt-history` | Complete trade history | Paid ($0.01/3 trades) |
-| `/mt-track` | Compose a trade tweet for @MangroveTrader | Free |
-| `/mt-cancel` | Cancel your last trade (5-min window) | Free |
-| `/mt-watch` | Add a trader to your watchlist (notifications coming soon) | Free |
-| `/mt-unwatch` | Remove a trader from your watchlist | Free |
-| `/mt-status` | Server health and tool availability | Free |
+| `/mt-cancel` | Cancel last trade (5-min window) | Free |
+| `/mt-watch` | Watch a trader | Free |
+| `/mt-unwatch` | Unwatch a trader | Free |
+| `/mt-set-handle` | Set your Twitter handle for this session | Free |
+| `/mt-status` | Server health | Free |
 | `/mt-help` | List all commands | Free |
 
 ## MCP Tools
@@ -53,9 +54,9 @@ The plugin connects to MangroveTrader's MCP server at `https://api.mangrovetrade
 | `trader_cancel_last` | Free | -- |
 | `trader_watch` | Free | -- |
 | `trader_unwatch` | Free | -- |
-| `trader_get_leaderboard` | x402 | $0.25+ USDC |
+| `trader_get_leaderboard` | x402 | $0.25+ USDC (top 5 free on Twitter) |
 | `trader_search_trader` | x402 | $0.02 USDC |
-| `trader_get_trade_history` | x402 | $0.01/3 trades |
+| `trader_get_trade_history` | Free / x402 | Free (own) / $0.01/3 trades (others) |
 
 ## How Trading Works
 

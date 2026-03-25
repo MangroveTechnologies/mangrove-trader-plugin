@@ -12,31 +12,28 @@ Display all available MangroveTrader commands.
 Present this to the user:
 
 ```
-MangroveTrader Plugin Commands
+MangroveTrader — mangrovetraders.com
 
-FREE STATS
-  /mt-stats        Your score, rank, and open positions
-  /mt-report       Detailed performance breakdown (return, Sharpe, drawdown)
-  /mt-last         Your most recent trade
+Getting started:
+  1. /mt-set-handle <your_twitter_handle>   Set your identity
+  2. /mt-track                              Compose and tweet a trade
+  3. /mt-stats                              Check your score and rank
 
-PAID DATA (x402, USDC on Base)
-  /mt-leaderboard  Full rankings ($0.25+)
-  /mt-search       Find a trader ($0.02)
-  /mt-history      Trade history ($0.01/3 trades)
+Commands:
+  /mt-track                            Compose a trade tweet
+  /mt-stats [handle]                   Score, rank, open positions
+  /mt-report [handle] [timeframe]      Performance breakdown
+  /mt-last [handle]                    Most recent trade
+  /mt-history [handle] [limit]         Trade history (own free, others $0.01/3)
+  /mt-leaderboard [timeframe] [limit]  Rankings ($0.25+, top 5 free on Twitter)
+  /mt-search <query>                   Find a trader ($0.02)
+  /mt-cancel [handle]                  Cancel last trade (5-min window)
+  /mt-watch [handle] <target>          Watch a trader
+  /mt-unwatch [handle] <target>        Unwatch a trader
+  /mt-set-handle <handle>              Set your Twitter handle for this session
+  /mt-status                           Server health
+  /mt-help                             This help message
 
-TRADE ACTIONS
-  /mt-track        Compose a trade tweet for @MangroveTrader
-  /mt-cancel       Cancel your last trade (5-min window)
-
-WATCHLIST (notifications coming soon)
-  /mt-watch        Add a trader to your watchlist
-  /mt-unwatch      Remove a trader from your watchlist
-
-UTILITY
-  /mt-status       Server health and tool availability
-  /mt-help         This help message
-
-Trades are submitted by tweeting to @MangroveTrader on Twitter.
-Paid tools use the x402 protocol (USDC on Base). Free alternatives
-are always available -- your own stats, rank, and last trade are free.
+[handle] = optional if set via /mt-set-handle, <param> = required.
+Trades submitted by tweeting @MangroveTrader. Paid tools use x402 (USDC on Base).
 ```
