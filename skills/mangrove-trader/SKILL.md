@@ -22,16 +22,16 @@ Social trading leaderboard. Traders tweet to **@MangroveTrader** on Twitter, a G
 
 | Command | Description | Access |
 |---------|-------------|--------|
-| `/mt-stats` | Score, rank, open positions | Free |
-| `/mt-report` | Detailed performance breakdown | Free |
-| `/mt-last` | Most recent trade | Free |
-| `/mt-leaderboard` | Full rankings | x402 $0.25+ |
-| `/mt-search` | Find a trader | x402 $0.02 |
-| `/mt-history` | Trade history | x402 $0.01/3 trades |
 | `/mt-track` | Compose a trade tweet | Free |
+| `/mt-stats` | Score, rank, open positions | Free |
+| `/mt-report` | Performance breakdown (return, Sharpe, drawdown) | Free |
+| `/mt-last` | Most recent trade | Free |
+| `/mt-history` | Trade history | Free (own) / x402 $0.01/3 trades (others) |
+| `/mt-leaderboard` | Full rankings (top 5 free on Twitter) | x402 $0.25+ |
+| `/mt-search` | Find a trader | x402 $0.02 |
 | `/mt-cancel` | Cancel last trade (5-min window) | Free |
-| `/mt-watch` | Add to watchlist (notifications coming soon) | Free |
-| `/mt-unwatch` | Remove from watchlist | Free |
+| `/mt-watch` | Watch a trader | Free |
+| `/mt-unwatch` | Unwatch a trader | Free |
 | `/mt-status` | Server health + tool list | Free |
 | `/mt-help` | List all commands | Free |
 
@@ -86,13 +86,15 @@ All paid tools follow the x402 payment protocol. See [Payment Flow](#x402-paymen
 
 ### Leaderboard -- `/mt-leaderboard`
 
-**Tool:** `trader_get_leaderboard` -- $0.25+ USDC on Base
+**Tool:** `trader_get_leaderboard` -- $0.25+ USDC on Base. Top 5 free on Twitter.
 
 1. Call WITHOUT `payment` param (include `timeframe` and `limit`)
 2. Get PAYMENT_REQUIRED with price
 3. Present price, confirm with user
 4. If confirmed and payment signed, call WITH `payment`
 5. Returns: ranked list of traders with score, return %, trade count
+
+**Tip:** Top 5 is always free by tweeting "leaderboard" to @MangroveTrader.
 
 ### Search Trader -- `/mt-search`
 
@@ -106,8 +108,13 @@ All paid tools follow the x402 payment protocol. See [Payment Flow](#x402-paymen
 
 ### Trade History -- `/mt-history`
 
-**Tool:** `trader_get_trade_history` -- $0.01 per 3 trades USDC on Base
+**Tool:** `trader_get_trade_history` -- Free (own) / $0.01 per 3 trades (others) USDC on Base
 
+**Own history (free):**
+1. Call with `twitter_handle` AND `requester_handle` set to the user's own handle
+2. Data returns directly with `"access": "free"` -- no payment needed
+
+**Others' history (paid):**
 1. Call WITHOUT `payment` (include `twitter_handle`, optional `limit`)
 2. Get PAYMENT_REQUIRED with total_trades and computed price
 3. Present: "X trades available, cost is $Y USDC. Proceed?"
@@ -177,12 +184,12 @@ Traders must close a minimum number of trades to qualify for scoring and the lea
 | `trader_my_stats` | Free | -- | Score, rank, open positions |
 | `trader_performance_report` | Free | -- | Detailed scoring breakdown |
 | `trader_last_trade` | Free | -- | Most recent trade + total count |
-| `trader_get_leaderboard` | x402 | $0.25+ | Full rankings (dynamic pricing) |
+| `trader_get_leaderboard` | x402 | $0.25+ | Full rankings. Top 5 free on Twitter. |
 | `trader_search_trader` | x402 | $0.02 | Look up any trader by name/handle |
-| `trader_get_trade_history` | x402 | $0.01/3 trades | Full trade log |
+| `trader_get_trade_history` | Free / x402 | Free (own) / $0.01/3 (others) | Trade log. Pass `requester_handle` for free own history. |
 | `trader_cancel_last` | Free | -- | Cancel most recent trade |
-| `trader_watch` | Free | -- | Add to watchlist (notifications coming soon) |
-| `trader_unwatch` | Free | -- | Remove from watchlist |
+| `trader_watch` | Free | -- | Watch a trader |
+| `trader_unwatch` | Free | -- | Unwatch a trader |
 
 ---
 

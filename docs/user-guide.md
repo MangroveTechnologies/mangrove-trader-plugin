@@ -7,7 +7,7 @@ Step-by-step guide to using every MangroveTrader feature through the Claude Code
 - This plugin installed (see [Install](#install) below)
 - (Optional) A wallet with USDC on Base mainnet for paid tool testing (MetaMask, Phantom, or any EVM wallet)
 
-**Cost:** Free to use most features. Paid tools cost $0.02-$1.25 USDC per query on Base.
+**Cost:** Free to use most features. Your own trade history is free. Paid tools (others' history, full leaderboard, search) cost $0.02-$1.25 USDC per query on Base.
 
 ---
 
@@ -39,11 +39,12 @@ You should see all 12 commands listed. If you don't see `/mt-help`, the plugin d
 /mt-status
 ```
 
-**Expected:** Server health (healthy/unhealthy), Redis and database connection status, worker status, and a list of all 9 MCP tools with their access tier and pricing.
+**Expected:** API health (healthy/unhealthy), Twitter Agent status (alive/dead), and a list of all 12 plugin commands.
 
 **Pass criteria:**
-- [ ] Status shows "healthy"
-- [ ] 9 tools listed (6 free, 3 paid)
+- [ ] API shows "healthy"
+- [ ] Twitter Agent shows "alive"
+- [ ] 12 commands listed in user-journey order
 - [ ] MCP endpoint shown: `https://api.mangrovetraders.com/mcp/`
 
 ---
@@ -104,7 +105,7 @@ Enter handle: `_jhthomas`
 **Expected:** The plugin calls `trader_last_trade` and shows:
 - Most recent trade (action, symbol, quantity, price, timestamp)
 - Total trade count
-- Mention of `/mt-history` for full history (paid)
+- Mention of `/mt-history` for full history (free for own trades)
 
 **Pass criteria:**
 - [ ] MCP tool `trader_last_trade` was called
@@ -194,7 +195,7 @@ Enter a search query (handle or name).
 
 ---
 
-## Step 8: View Trade History (Paid -- $0.01 per 3 trades)
+## Step 8: View Trade History (Free for own, Paid for others)
 
 ```
 /mt-history
@@ -202,10 +203,17 @@ Enter a search query (handle or name).
 
 Enter handle: `_jhthomas`
 
-**Expected:** Same two-step flow. Price depends on number of trades.
+**Own history (free):**
+- Plugin calls `trader_get_trade_history` with `requester_handle` matching your handle
+- Data returns directly with `"access": "free"` — no payment needed
+
+**Others' history (paid, $0.01 per 3 trades):**
+- Same two-step payment flow. Price depends on number of trades.
 
 **Pass criteria:**
-- [ ] PAYMENT_REQUIRED shows total trades and computed price
+- [ ] Own history returns data immediately (no PAYMENT_REQUIRED)
+- [ ] Own history response has `access: "free"`
+- [ ] Others' history shows PAYMENT_REQUIRED with computed price
 - [ ] Price formula: ceil(trades / 3) * $0.01
 - [ ] Full trade list returned if payment completed
 
@@ -276,12 +284,12 @@ Enter your handle and the target trader's handle.
 /mt-help
 ```
 
-**Expected:** All 12 commands listed, grouped by category (free stats, paid data, trade actions, watchlist, utility), with pricing for paid commands.
+**Expected:** All 12 commands listed in user-journey order (trade, stats, report, history, leaderboard, search, manage, utility), with pricing for paid commands.
 
 **Pass criteria:**
 - [ ] 12 commands shown
 - [ ] Pricing shown for paid commands
-- [ ] Watchlist section notes "notifications coming soon"
+- [ ] Own trade history noted as free
 
 ---
 
@@ -294,9 +302,9 @@ Enter your handle and the target trader's handle.
 | 3 | Performance report | `/mt-report` | `trader_performance_report` | Free |
 | 4 | Last trade | `/mt-last` | `trader_last_trade` | Free |
 | 5 | Compose trade | `/mt-track` | (local only) | Free |
-| 6 | Leaderboard | `/mt-leaderboard` | `trader_get_leaderboard` | $0.25+ |
+| 6 | Leaderboard | `/mt-leaderboard` | `trader_get_leaderboard` | $0.25+ (top 5 free on Twitter) |
 | 7 | Search trader | `/mt-search` | `trader_search_trader` | $0.02 |
-| 8 | Trade history | `/mt-history` | `trader_get_trade_history` | $0.01/3 trades |
+| 8 | Trade history | `/mt-history` | `trader_get_trade_history` | Free (own) / $0.01/3 trades (others) |
 | 9 | Cancel trade | `/mt-cancel` | `trader_cancel_last` | Free |
 | 10 | Watch trader | `/mt-watch` | `trader_watch` | Free |
 | 11 | Unwatch trader | `/mt-unwatch` | `trader_unwatch` | Free |

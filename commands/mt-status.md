@@ -11,29 +11,26 @@ Check server health and show tool availability.
 
 1. Call the health endpoint: `GET https://api.mangrovetraders.com/health`
 2. Present server status:
-   - **Status**: healthy/unhealthy
-   - **Redis**: connected/disconnected
-   - **Database**: connected/disconnected
-   - **Worker**: alive/dead (the Twitter polling agent)
-3. List all MCP tools with access tier and pricing:
+   - **API**: healthy/unhealthy (based on `status` field)
+   - **Twitter Agent**: alive/dead (based on `worker` field)
+   - Do NOT show redis or database fields — those are internal
+3. List all plugin commands with access tier and pricing:
 
 ```
-MCP Tools (9 available)
+Plugin Commands (12 available)
 
-FREE
-  trader_my_stats              Score, rank, open positions
-  trader_performance_report    Detailed scoring breakdown
-  trader_last_trade            Most recent trade + total count
-
-PAID (x402, USDC on Base)
-  trader_get_leaderboard       Full rankings ($0.25+)
-  trader_search_trader         Trader lookup ($0.02)
-  trader_get_trade_history     Full trade log ($0.01/3 trades)
-
-FREE (continued)
-  trader_cancel_last           Cancel most recent trade (5-min window)
-  trader_watch                 Watch a trader
-  trader_unwatch               Stop watching a trader
+  /mt-track        Compose a trade tweet
+  /mt-stats        Your score, rank, open positions
+  /mt-report       Performance breakdown (return, Sharpe, drawdown)
+  /mt-last         Your most recent trade
+  /mt-history      Trade history (own free, others $0.01/3 trades)
+  /mt-leaderboard  Rankings ($0.25+, top 5 free on Twitter)
+  /mt-search       Find a trader ($0.02)
+  /mt-cancel       Cancel last trade (5-min window)
+  /mt-watch        Watch a trader
+  /mt-unwatch      Unwatch a trader
+  /mt-status       Server health (this command)
+  /mt-help         All commands
 ```
 
 4. Show MCP endpoint: `https://api.mangrovetraders.com/mcp/`

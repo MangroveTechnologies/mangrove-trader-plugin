@@ -1,6 +1,6 @@
 ---
 name: mt-leaderboard
-description: View the MangroveTrader leaderboard rankings (x402 paid, $0.25+ USDC on Base)
+description: View the MangroveTrader leaderboard rankings (x402 paid, $0.25+ USDC on Base). Top 5 free on Twitter.
 ---
 
 # mt-leaderboard
@@ -8,6 +8,8 @@ description: View the MangroveTrader leaderboard rankings (x402 paid, $0.25+ USD
 View the full MangroveTrader leaderboard.
 
 This is an x402 paid tool. The agent or user must pay in USDC on Base to access the data.
+
+**Tip:** The top 5 is always free by tweeting "leaderboard" to @MangroveTrader on Twitter.
 
 ## Steps
 
