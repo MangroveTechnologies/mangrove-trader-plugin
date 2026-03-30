@@ -1,7 +1,5 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "mangrove-trader-plugin",
-  "description": "MangroveTrader social trading leaderboard plugin for Claude Code",
   "owner": {
     "name": "Mangrove Technologies"
   },
