@@ -6,6 +6,7 @@ This plugin connects Claude Code to the MangroveTrader MCP server, giving you 13
 
 **Website:** [mangrovetraders.com](https://mangrovetraders.com)
 **Twitter:** [@MangroveTrader](https://twitter.com/MangroveTrader)
+**Discord:** [Join our community](https://discord.gg/xUcn4R6zJR)
 **Source:** [github.com/MangroveTechnologies/mangrove-trader-plugin](https://github.com/MangroveTechnologies/mangrove-trader-plugin)
 
 ## Install
