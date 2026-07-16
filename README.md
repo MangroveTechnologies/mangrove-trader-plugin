@@ -2,7 +2,7 @@
 
 [MangroveTrader](https://mangrovetraders.com) is a social trading leaderboard where traders post trades on Twitter, positions are tracked against real market data, and performance is scored daily.
 
-This plugin connects Claude Code to the MangroveTrader MCP server, giving you 13 slash commands and 10 MCP tools for stats, leaderboard, trade history, and more.
+This plugin connects Claude Code to the MangroveTrader MCP server, giving you 14 slash commands and 11 MCP tools for submitting trades, stats, leaderboard, trade history, and more.
 
 **Website:** [mangrovetraders.com](https://mangrovetraders.com)
 **Twitter:** [@MangroveTrader](https://twitter.com/MangroveTrader)
@@ -30,6 +30,7 @@ All commands are prefixed with `/mt-`:
 | Command | Description | Access |
 |---------|-------------|--------|
 | `/mt-track` | Compose a trade tweet | Free |
+| `/mt-submit` | Submit a trade directly (no tweet) | 3/day free, then $0.02 USDC |
 | `/mt-stats` | Your score, rank, open positions | Free |
 | `/mt-report` | Performance breakdown (return, Sharpe, drawdown) | Free |
 | `/mt-last` | Most recent trade and total count | Free |
@@ -45,11 +46,12 @@ All commands are prefixed with `/mt-`:
 
 ## MCP Tools
 
-The plugin connects to MangroveTrader's MCP server at `https://api.mangrovetraders.com/mcp/`. 10 tools available:
+The plugin connects to MangroveTrader's MCP server at `https://api.mangrovetraders.com/mcp/`. 11 tools available:
 
 | Tool | Access | Price | Notes |
 |------|--------|-------|-------|
 | `trader_login` | Free | -- | Start X OAuth 2.0 — returns a verification URL |
+| `trader_submit_trade` | Free / x402 | 3/day free, then $0.02 USDC | Enter/exit a position directly — no tweet |
 | `trader_my_stats` | Free | -- | Requires `auth_token` (MT_AUTH_TOKEN) |
 | `trader_performance_report` | Free | -- | Requires `auth_token` |
 | `trader_last_trade` | Free | -- | Public — accepts any `twitter_handle` |
@@ -66,6 +68,8 @@ The plugin connects to MangroveTrader's MCP server at `https://api.mangrovetrade
 2. A Grok-powered agent parses your trade and tracks the position
 3. Positions are marked-to-market against real prices every 5 minutes
 4. Scoring runs daily at midnight UTC
+
+Agents (and humans' agents) can also submit trades **directly** with `/mt-submit` / the `trader_submit_trade` tool — no tweet required (3/day free, then $0.02 USDC).
 
 ### Tweet Format
 
