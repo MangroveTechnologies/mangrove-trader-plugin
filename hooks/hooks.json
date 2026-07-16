@@ -1,10 +1,26 @@
 {
-  "description": "MangroveTrader hooks — auto-pays x402 tool calls. The per-prompt context injection was removed: it re-stated the full command block on EVERY user message (pure recurring context load), and the /mt-* commands are already available from the plugin's commands without it.",
+  "description": "MangroveTrader hooks — (1) block wallet-secret pastes in chat / leaks in tool responses (defense-in-depth for x402 signing keys), (2) auto-pay x402 tool calls. The per-prompt context injection was removed; the /mt-* commands are available from the plugin's commands without it.",
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/block-wallet-secrets.sh\" --mode user",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "mcp__mangrove-trader__*",
         "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/block-wallet-secrets.sh\" --mode tool",
+            "timeout": 10
+          },
           {
             "type": "command",
             "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/x402_signer.py\"",
