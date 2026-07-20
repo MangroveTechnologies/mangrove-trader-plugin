@@ -96,13 +96,26 @@ Paid tools use the [x402 protocol](https://www.x402.org/) for micropayments:
 For agents with wallets: use the x402 SDK or MangroveMarkets TypeScript SDK to sign payments.
 For Claude Code users without wallets: free tools work without payment. Paid data available via REST API with an API key.
 
+### Auto-pay (optional) — providing a signing key safely
+
+The bundled `hooks/x402_signer.py` can auto-sign x402 payments so paid tools "just work." It reads the signing key from the **`MT_WALLET_PRIVATE_KEY`** environment variable — set it **out-of-band** (your shell profile or your MCP client's env config), **never in chat**:
+
+```bash
+export MT_WALLET_PRIVATE_KEY=0x...   # in ~/.zshrc / ~/.bashrc — NOT in the conversation
+```
+
+- Use a **dedicated wallet** funded with a small amount of USDC on Base — not your main wallet.
+- Auto-pay is capped by **`MT_MAX_PAYMENT_USD`** (default `$0.30`/request).
+- Pasting a private key or seed phrase into chat is refused by the `block-wallet-secrets` hook (see Security) — keys would otherwise be written to your transcript and sent to the model API.
+
 ## Security and Privacy
 
 This plugin connects to a remote MCP server hosted on GCP Cloud Run. Here is what it does and does not do:
 
 - **Data accessed:** Public trading data (scores, ranks, trade history). No personally identifiable information.
 - **Identity verification:** Free tools that write or read your account (`trader_my_stats`, `trader_cancel_last`, `trader_watch`, `trader_unwatch`) require a session token obtained via X OAuth 2.0. Use `/mt-set-handle` to authenticate — your handle is verified server-side and cannot be spoofed.
-- **No credentials stored:** The plugin does not store, transmit, or require any API keys, wallet keys, or passwords. The session token (`MT_AUTH_TOKEN`) is stored only in your local environment.
+- **No credentials stored:** The plugin stores no API keys, wallet keys, or passwords. The session token (`MT_AUTH_TOKEN`) and the optional auto-pay key (`MT_WALLET_PRIVATE_KEY`) live only in your local environment — never in the plugin, never transmitted anywhere but the payment they sign.
+- **Wallet secrets never in chat (enforced):** The `block-wallet-secrets` hook (`hooks/block-wallet-secrets.sh`) refuses any EVM private key or BIP39 seed phrase pasted into a prompt, and blocks a tool response that would leak key material back into the transcript. Provide the x402 signing key via `MT_WALLET_PRIVATE_KEY` in your environment (see [x402 Payments](#x402-payments)) — never by typing it here.
 - **Payment confirmation:** Paid tools always show the price and ask for confirmation before any charge. You are never charged without explicit consent.
 - **x402 payments:** All payments settle on Base mainnet (USDC). Transaction hashes are returned for on-chain verification.
 - **Server source code:** The MCP server source is public at [github.com/MangroveTechnologies/MangroveTrader](https://github.com/MangroveTechnologies/MangroveTrader).
