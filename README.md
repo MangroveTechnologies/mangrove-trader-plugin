@@ -23,6 +23,20 @@ Or load for a single session without installing:
 claude --plugin-dir ./mangrove-trader-plugin
 ```
 
+### Source and release versions
+
+The current repository plugin and marketplace manifests declare **2.0.5**. The
+latest published GitHub release is still
+[v2.0.1](https://github.com/MangroveTechnologies/mangrove-trader-plugin/releases/tag/v2.0.1).
+A repository install reads the selected checkout; it does not imply that 2.0.5 has
+been tagged or released. This plugin is not published on PyPI or npm under its
+plugin or repository name.
+
+For a reproducible source install, check out a full reviewed commit before using
+`claude --plugin-dir`. Keep the commit alongside the manifest version when
+recording an installation. [Release preparation](RELEASING.md) builds an exact
+commit archive without creating a tag or GitHub release.
+
 ## Commands
 
 All commands are prefixed with `/mt-`:
@@ -117,4 +131,8 @@ This plugin connects to a remote MCP server hosted on GCP Cloud Run. Here is wha
 
 ## License
 
-MIT
+The plugin declares MIT. [LICENSE](LICENSE) contains the existing abbreviated,
+permissive MIT-style grant, including commercial use subject to its notice
+condition. It is not the canonical MIT text. The grant is preserved unchanged;
+canonical-text alignment requires the copyright owner's decision because the
+notice-condition and warranty wording differ. See [release preparation](RELEASING.md).
