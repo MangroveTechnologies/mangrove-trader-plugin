@@ -16,22 +16,29 @@ Claude Code plugin for the MangroveTrader social trading leaderboard.
   marketplace.json            Marketplace index (required for claude plugin install)
 .mcp.json                     MCP server config (remote, streamable HTTP)
 skills/mangrove-trader/       Consolidated skill for all tool interactions
-commands/                     12 mt-* slash commands
+  commands/                     mt-* slash commands
 hooks/                        Context injection on prompt submit
 docs/plans/                   Implementation plans
 ```
 
-## Commands (12 total, all prefixed /mt-)
+## Commands
+
+Commands are prefixed `/mt-`; see README.md for the current command reference.
 
 **Free:** `/mt-stats`, `/mt-report`, `/mt-last`, `/mt-track`, `/mt-status`, `/mt-help`
 **Paid (x402):** `/mt-leaderboard`, `/mt-search`, `/mt-history`
 **Free actions:** `/mt-cancel`, `/mt-watch`, `/mt-unwatch`
 
+**Account connection:** `/mt-set-handle` starts the X OAuth sign-in flow.
+
 ## MCP Server
 
 The plugin connects to the MangroveTrader MCP server via streamable HTTP at `https://api.mangrovetraders.com/mcp/`. No local process needed -- the server runs on GCP Cloud Run.
 
-## Tools (9 available)
+## MCP tools
+
+Use the advertised MCP catalog for the serving tool set. `trader_login` starts
+the X OAuth flow before authenticated account operations.
 
 **Free:** `trader_my_stats`, `trader_performance_report`, `trader_last_trade`
 **Paid (x402):** `trader_get_leaderboard` ($0.25+), `trader_search_trader` ($0.02), `trader_get_trade_history` ($0.01/3 trades)
