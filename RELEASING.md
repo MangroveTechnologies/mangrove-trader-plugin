@@ -18,6 +18,10 @@ reads committed files, so uncommitted changes are excluded. It never creates a
 tag, calls GitHub, or publishes a release. Repeating the same commit produces the
 same bytes; an existing different output is rejected.
 
+Preparation also verifies that the archive contains the exact committed license
+and both catalog manifests. Git archive attributes that omit or change those
+files fail before any output is written.
+
 For a source install, clone the repository, check out that exact commit with
 `git checkout --detach FULL_REVIEWED_COMMIT`, then point `claude --plugin-dir` at
 the checkout. Record both the full commit and manifest version. The marketplace

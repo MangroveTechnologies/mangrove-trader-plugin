@@ -9,6 +9,7 @@ import io
 import json
 import re
 import subprocess
+import tarfile
 from pathlib import Path
 
 
@@ -41,8 +42,10 @@ def prepare(commit: str, output: Path) -> dict[str, str]:
     if resolved != commit:
         raise ValueError("Selected object must itself be the exact commit")
 
-    plugin = json.loads(committed(commit, ".claude-plugin/plugin.json"))
-    marketplace = json.loads(committed(commit, ".claude-plugin/marketplace.json"))
+    plugin_bytes = committed(commit, ".claude-plugin/plugin.json")
+    marketplace_bytes = committed(commit, ".claude-plugin/marketplace.json")
+    plugin = json.loads(plugin_bytes)
+    marketplace = json.loads(marketplace_bytes)
     entries = marketplace["plugins"]
     if (
         plugin["name"] != "mangrove-trader"
@@ -71,6 +74,23 @@ def prepare(commit: str, output: Path) -> dict[str, str]:
             git("archive", "--format=tar", f"--prefix=mangrove-trader-{version}/", commit)
         )
     archive_bytes = archive.getvalue()
+    required = {
+        "LICENSE": license_bytes,
+        ".claude-plugin/plugin.json": plugin_bytes,
+        ".claude-plugin/marketplace.json": marketplace_bytes,
+    }
+    with tarfile.open(fileobj=io.BytesIO(archive_bytes), mode="r:gz") as prepared:
+        for path, expected in required.items():
+            name = f"mangrove-trader-{version}/{path}"
+            try:
+                member = prepared.getmember(name)
+            except KeyError as error:
+                raise ValueError(f"Archive omits required file: {path}") from error
+            if not member.isfile():
+                raise ValueError(f"Archive member must be a regular file: {path}")
+            content = prepared.extractfile(member)
+            if content is None or content.read() != expected:
+                raise ValueError(f"Archive differs from committed file: {path}")
     digest = hashlib.sha256(archive_bytes).hexdigest()
     provenance = {
         "repository": "https://github.com/MangroveTechnologies/mangrove-trader-plugin",
